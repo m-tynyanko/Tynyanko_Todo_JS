@@ -1,16 +1,22 @@
 let input = document.getElementById("inputId");
 const button = document.getElementById("buttonId");
+const container = document.querySelector(".container");
 
 const tasks=[];
 
-
-
-
 function typeNewTasks() {  
-    tasks.push(input.value);
+    let newTask = {
+        text:input.value,
+        check:false
+    };
+    tasks.push(newTask.text);
     console.log(tasks);
-}
+};
 
-button.addEventListener('click', typeNewTasks);
+function createNewTextNode() {
+    container.innerHTML = '<p>'+input.value+'</p>';
+};
 
+//button.addEventListener('click', typeNewTasks);
+button.addEventListener('click', createNewTextNode);
     
