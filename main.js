@@ -1,7 +1,16 @@
-var to_do=[];
-var srt = "Hello, world";
+let input = document.getElementById("inputId");
+const button = document.getElementById("buttonId");
+
+const tasks=[];
 
 
-window.onload(){
-    console.log(str);
-};
+
+
+function typeNewTasks() {  
+    tasks.push(input.value);
+    console.log(tasks);
+}
+
+button.addEventListener('click', typeNewTasks);
+
+    
