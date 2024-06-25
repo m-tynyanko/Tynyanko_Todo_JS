@@ -1,22 +1,29 @@
 let input = document.getElementById("inputId");
 const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
+const checkbox = document.getElementById("checkId");
 
 const tasks=[];
+let n = 0;
 
-function typeNewTasks() {  
+function createNewTask() {
+    n += 1;
     let newTask = {
         text:input.value,
-        check:false
+        check:false,
+        id:n
     };
-    tasks.push(newTask.text);
+    tasks.push(newTask)
+    newTaskHTML = '<p><input type="checkbox" id="checkId" name="check" />'+
+    '<label for="check">'+' '+newTask.text+'</label></p>';
+    container.innerHTML += newTaskHTML;
     console.log(tasks);
 };
 
-function createNewTextNode() {
-    container.innerHTML = '<p>'+input.value+'</p>';
-};
+function checkCheckBox() {
+    console.log('click!')
+}
 
-//button.addEventListener('click', typeNewTasks);
-button.addEventListener('click', createNewTextNode);
-    
+
+button.addEventListener('click', createNewTask);
+checkbox.addEventListener('click', checkCheckBox);

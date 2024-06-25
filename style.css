@@ -1,0 +1,9 @@
+div{
+    .d-content{
+        display: block
+        }
+        .d-content span{
+        display: block;
+        width: fit-content
+        } 
+}
