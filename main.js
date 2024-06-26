@@ -65,19 +65,31 @@ function keyPressed(event) {
 }
 
 function clearAll() {
-    tasks = [];
-    renderAllTasks;
+    tasks = tasks.splice(0, tasks, length);
+    renderAllTasks();
     console.log("cleared");
 }
 
-function checkAll() {
-    tasks.forEach((task) => {
-        if (!task.check){
-            task.check = !task.check;
-        }
-        return 
-    });
-    renderAllTasks;
+function checkAll(event) {
+    if (tasks.every() && event.target.checked){
+        tasks.forEach((task) => {
+            task.check = false;
+        });
+    }
+    else {
+        tasks.forEach((task) => {
+            if (!task.check){
+                task.check = !task.check;
+                console.log(event.target.checked);
+            }
+        });
+    }
+    
+function allTrue(element, index, array) {
+    return element == true;
+}
+
+    renderAllTasks();
     console.log("all check")
 }
 
@@ -85,7 +97,7 @@ button.addEventListener('click', createNewTask);
 input.addEventListener("keypress", (event) => {keyPressed(event)});
 container.addEventListener('click', (event) => {changeTask(event)});
 delButton.addEventListener('click', clearAll);
-checkBox.addEventListener('click', checkAll);
+checkBox.addEventListener('click', (event) => checkAll(event));
 
 
 
