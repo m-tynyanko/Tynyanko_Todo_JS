@@ -16,13 +16,15 @@ function createNewTask() {
     console.log(tasks);
 };
 
-
-
 function renderAllTasks() {
     let listOfTasksHTML = ''
     tasks.forEach((task) => {
+        let check = ""
+        if (task.check){
+            check = "checked"
+        }
         listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
-                                <input class="task-checkbox" type="checkbox"> \
+                                <input class="task-checkbox" type="checkbox" ${check}/> \
                                 <input hidden class="task-text" value=${task.text}> \
                                 <span class="task-text">${task.text}</span> \
                                 <button class="task-button-delete">X</button> \
@@ -32,12 +34,24 @@ function renderAllTasks() {
     container.innerHTML = listOfTasksHTML;
 }
 
+function checkCheckBox(event) {
+    if (event.target.type == 'checkbox'){
+        let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
+        tasks[targetIndex].check = !tasks[targetIndex].check
+        console.log(tasks)
+    }
+}
 
+function delTask(event) {
+    
+}
 
 button.addEventListener('click', createNewTask);
 button.addEventListener('click', renderAllTasks);
-window.addEventListener('load', renderAllTasks);
-container.addEventListener('click')
+// window.addEventListener('load', renderAllTasks);
+container.addEventListener('click', (event) => {
+    // checkCheckBox(event);
+    console.log(event.target.type);
+});
 
-
-//heckbox.addEventListener('click', checkCheckBox);
+//checkbox.addEventListener('click', checkCheckBox);
