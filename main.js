@@ -1,22 +1,12 @@
 let input = document.getElementById("inputId");
 const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
-//const checkbox = document.getElementById("checkId");
 
-/*const tasks=[];
-tasks[0] = {text:0,
-    check:0,
-    id:0
-}
-*/
-let n = 0;
 
-function layout() {
-    
-}
+const tasks=[];
+
 
 function createNewTask() {
-    n += 1;
     let newTask = {
         text:input.value,
         check:false,
@@ -29,27 +19,25 @@ function createNewTask() {
 
 
 function renderAllTasks() {
-    for (let i = 1; i <= n; i++) {
-        let currentTask = tasks[i];
-        newTaskHTML = '<p><input type="checkbox" id="'+ currentTask.id +'" name="check" />'+
-        '<label for="check">'+' '+currentTask.text+'</label></p>';
-        container.innerHTML += newTaskHTML;
-    }
+    let listOfTasksHTML = ''
+    tasks.forEach((task) => {
+        listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
+                                <input class="task-checkbox" type="checkbox"> \
+                                <input hidden class="task-text" value=${task.text}> \
+                                <span class="task-text">${task.text}</span> \
+                                <button class="task-button-delete">X</button> \
+                            </li>`;
+        
+    });
+    container.innerHTML = listOfTasksHTML;
 }
 
-function renderLastTask() {
-    let currentTask = tasks[n];
-    newTaskHTML = '<p><input type="checkbox" id="'+ currentTask.id +'" name="check" />'+
-    '<label for="check">'+' '+currentTask.text+'</label></p>';
-    container.innerHTML += newTaskHTML;
-}
 
-
-
-function checkCheckBox() {
-    console.log('click!')
-}
 
 button.addEventListener('click', createNewTask);
-button.addEventListener('click', renderLastTask);
+button.addEventListener('click', renderAllTasks);
+window.addEventListener('load', renderAllTasks);
+container.addEventListener('click')
+
+
 //heckbox.addEventListener('click', checkCheckBox);
