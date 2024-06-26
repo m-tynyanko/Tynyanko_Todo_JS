@@ -1,6 +1,8 @@
 let input = document.getElementById("inputId");
 const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
+const delButton = document.getElementById("delAll");
+const checkBox = document.getElementById("checkAll");
 
 let tasks=[];
 
@@ -62,9 +64,28 @@ function keyPressed(event) {
     }
 }
 
+function clearAll() {
+    tasks = [];
+    renderAllTasks;
+    console.log("cleared");
+}
+
+function checkAll() {
+    tasks.forEach((task) => {
+        if (!task.check){
+            task.check = !task.check;
+        }
+        return 
+    });
+    renderAllTasks;
+    console.log("all check")
+}
+
 button.addEventListener('click', createNewTask);
 input.addEventListener("keypress", (event) => {keyPressed(event)});
 container.addEventListener('click', (event) => {changeTask(event)});
+delButton.addEventListener('click', clearAll);
+checkBox.addEventListener('click', checkAll);
 
 
 
