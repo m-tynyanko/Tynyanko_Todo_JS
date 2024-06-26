@@ -14,9 +14,11 @@ function createNewTask() {
             id:Date.now()
         };
         tasks.push(newTask);
+
         console.log(tasks);
         input.value = "";
         input.focus();
+        renderAllTasks();
     }
     
 };
@@ -40,40 +42,30 @@ function renderAllTasks() {
 
 }
 
-function checkCheckBox(event) {
+
+function changeTask(event) {
     if (event.target.type == 'checkbox') {
         let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
         tasks[targetIndex].check = !tasks[targetIndex].check;
         console.log(tasks);
     }
-}
-
-function delTask(event) {
     if (event.target.type == 'submit') {
         tasks = tasks.filter(task => task.id != event.target.parentNode.id);
         renderAllTasks();
     }
+    console.log(event.target.type+":"+event.target.parentNode.id);
 }
 
-
-
-button.addEventListener('click', () => {
-    createNewTask();
-    renderAllTasks();
-});
-
-input.addEventListener("keypress", function(event) {
+function keyPressed(event) {
     if (event.key === "Enter") {
         createNewTask();
-        renderAllTasks();
     }
-});
+}
 
-container.addEventListener('click', (event) => {
-    console.log(event.target.type+":"+event.target.parentNode.id)
-    checkCheckBox(event);
-    delTask(event);
-});
-// window.addEventListener('load', renderAllTasks);
+button.addEventListener('click', createNewTask);
+input.addEventListener("keypress", (event) => {keyPressed(event)});
+container.addEventListener('click', (event) => {changeTask(event)});
+
+
 
 
