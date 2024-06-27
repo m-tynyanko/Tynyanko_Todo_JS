@@ -27,6 +27,7 @@ function createNewTask() {
     
 };
 
+
 function renderAllTasks() {
     let listOfTasksHTML = '';
     
@@ -36,9 +37,9 @@ function renderAllTasks() {
             check = "checked";
         };
         listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
-                                <input class="task-checkbox" type="checkbox" ${check}/> \
-                                <input hidden class="task-text" value=${task.text}> \
+                                <input class="task-checkbox" type="checkbox" ${check}/>\
                                 <span class="task-text">${task.text}</span> \
+                                <input hidden class="task-text" value=${task.text}> \
                                 <button class="task-button-delete">X</button> \
                             </li>`;
         
@@ -56,8 +57,9 @@ function renderAllTasks() {
 
 
 function changeTask(event) {
+    let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     if (event.target.type == 'checkbox') {
-        let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
+        
         tasks[targetIndex].check = !tasks[targetIndex].check;
         
         console.log(tasks);
@@ -73,11 +75,41 @@ function changeTask(event) {
     if (event.target.type == 'button') {
         filterTasks(event.target.id);
     };
+    
+    if (event.target.className == 'task-text' && event.detail == 2) {
+        console.log(event.target.hidden);
+        event.target.hidden = "true";
+        console.log(event.target.hidden);
+        console.log(event.target.nextElementSibling.hidden);
+        let hiddenInput = event.target.nextElementSibling;
+        hiddenInput.hidden = "";
+        hiddenInput.required = "true";
+        
+        hiddenInput.focus();
+        tasks[targetIndex].text = hiddenInput.value;
+        console.log(hiddenInput.value);
+
+        // let newInput = document.createElement("input");
+        // newInput.type = "text";
+        
+        // textBox.parentNode.replaceChild(newInput, textBox);
+        // newInput.required = true;
+        // newInput.focus();
+        // console.log(newInput)
+        
+        
+        //tasks[targetIndex].text = newInput.value;
+
+        //let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
+    };
     delCheck();
     renderAllTasks();
+    console.log("rendered");
     //console.log(event.target.type+":"+event.target.parentNode.id);
-    console.log(event)
+    //console.log(event.detail+" "+event.target.className);
+    
 };
+
 
 function keyPressed(event) {
     if (event.key === "Enter") {
@@ -135,8 +167,8 @@ function filterTasks(id) {
 
 
 button.addEventListener('click', createNewTask);
-input.addEventListener("keypress", (event) => {keyPressed(event)});
-container.addEventListener('click', (event) => {changeTask(event)});
+input.addEventListener("keypress", keyPressed);
+container.addEventListener('click', changeTask);
 delButton.addEventListener('click', clearAll);
-checkBox.addEventListener('click', (event) => checkAll(event));
+checkBox.addEventListener('click', checkAll);
 
