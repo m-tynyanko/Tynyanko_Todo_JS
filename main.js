@@ -20,12 +20,13 @@ function createNewTask() {
         console.log(tasks);
         input.value = "";
         input.focus();
-        renderAllTasks();
+        delCheck();
+        renderAllTasks(tasks);
     }
     
 };
 
-function renderAllTasks() {
+function renderAllTasks(tasks) {
     let listOfTasksHTML = ''
     tasks.forEach((task) => {
         let check = ""
@@ -40,6 +41,12 @@ function renderAllTasks() {
                             </li>`;
         
     });
+    if (tasks.length > 0) {
+        listOfTasksHTML += `<p>All(${tasks.length}) \
+        Active(${tasks.filter(task => task.check == false).length}) \
+        Completed(${tasks.filter(task => task.check == true).length}) \
+        </p>`;
+    }
     container.innerHTML = listOfTasksHTML;
 
 }
@@ -49,12 +56,19 @@ function changeTask(event) {
     if (event.target.type == 'checkbox') {
         let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
         tasks[targetIndex].check = !tasks[targetIndex].check;
+        
         console.log(tasks);
+
+        if (tasks.every(task => task.check)){
+            checkBox.checked = true;
+        }
+
     }
     if (event.target.type == 'submit') {
         tasks = tasks.filter(task => task.id != event.target.parentNode.id);
-        renderAllTasks();
     }
+    delCheck();
+    renderAllTasks(tasks);
     console.log(event.target.type+":"+event.target.parentNode.id);
 }
 
@@ -65,33 +79,43 @@ function keyPressed(event) {
 }
 
 function clearAll() {
-    tasks = tasks.splice(0, tasks, length);
-    renderAllTasks();
+    let targetId = 0;
+    tasks.forEach((task) => {
+        if (task.check){
+            targetId = task.id;
+            tasks = tasks.filter(task => task.id != targetId);
+        }
+    });
+    delCheck();
+    renderAllTasks(tasks);
     console.log("cleared");
 }
 
 function checkAll(event) {
-    if (tasks.every() && event.target.checked){
+    if (tasks.every(task => task.check) && !event.target.checked){
         tasks.forEach((task) => {
-            task.check = false;
+            task.check = !task.check;
         });
     }
     else {
         tasks.forEach((task) => {
             if (!task.check){
                 task.check = !task.check;
-                console.log(event.target.checked);
             }
         });
     }
-    
-function allTrue(element, index, array) {
-    return element == true;
-}
-
-    renderAllTasks();
+    renderAllTasks(tasks);
     console.log("all check")
 }
+
+function delCheck() {
+    if (tasks.length == 0 || !tasks.every(task => task.check)) {
+        checkBox.checked = false;
+    }
+}
+
+
+
 
 button.addEventListener('click', createNewTask);
 input.addEventListener("keypress", (event) => {keyPressed(event)});
