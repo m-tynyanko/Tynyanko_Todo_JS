@@ -3,7 +3,7 @@ const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
 const delButton = document.getElementById("delAll");
 const checkBox = document.getElementById("checkAll");
-//const hInput = document.getElementById("hiddenInput");
+
 
 let tasks=[];
 let filterMode = "noFilter";
@@ -31,7 +31,7 @@ function createNewTask() {
 
 function renderAllTasks() {
     let listOfTasksHTML = '';
-    
+    let pages = Math.ceil(tasks.length / 5);
     tasks.filter(task => task.check !== filterMode).forEach((task) => {
         let check = "";
         if (task.check){
@@ -45,6 +45,16 @@ function renderAllTasks() {
                             </li>`;
         
     });
+    if (tasks.length > 5) {
+        
+        listOfTasksHTML += `<p>`
+        for (let i = 1; i < pages; i++){
+            listOfTasksHTML += `<button class="page-button">${i}</button>`
+        };
+        listOfTasksHTML += `</p>`
+    };
+
+
     if (tasks.length > 0) {        
         listOfTasksHTML += `<p> \
         <button id="allId" type="button">All(${tasks.length})</button> \
@@ -80,44 +90,15 @@ function changeTask(event) {
     };
     
     if (event.target.className == 'task-text' && event.detail == 2) {
-        console.log(event.target.hidden);
         event.target.hidden = "true";
-        console.log(event.target.hidden);
-        console.log(event.target.nextElementSibling.hidden);
         let hiddenInput = event.target.nextElementSibling;
         hiddenInput.hidden = "";
         hiddenInput.required = "true";
         
         hiddenInput.focus();
-        
-        // if (hiddenInput.value != "") {
-        //     tasks[targetIndex].text = hiddenInput.value;
-            
-        // } else {
-        //     console.log("input was empty");
-            
-        // }
-        // console.log(hiddenInput.value);
-
-        // let newInput = document.createElement("input");
-        // newInput.type = "text";
-        
-        // textBox.parentNode.replaceChild(newInput, textBox);
-        // newInput.required = true;
-        // newInput.focus();
-        // console.log(newInput)
-        
-        
-        //tasks[targetIndex].text = newInput.value;
-
-        //let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     };
+    console.log(event.target)
     delCheck();
-    
-    
-    //console.log(event.target.type+":"+event.target.parentNode.id);
-    //console.log(event.detail+" "+event.target.className);
-    
 };
 
 function clearAll() {
@@ -173,37 +154,39 @@ function keyPressed(event) {
 };
 
 function handleInputKey(event) {
-    //console.log(event.key+ " : " + event.target.className);
+    console.log(event);
     if (event.key === "Enter" && event.target.className == "task-text") {
-        saveChange(event, event.target.value);
-        console.log("enter");
-    }
+        saveChange(event);
+        renderAllTasks();
+    };
+    if (event.key === "Escape" && event.target.className == "task-text") {
+        renderAllTasks();
+    };
 };
 
 function handleInputBlur(event) {
-    //console.log(event.target.className);
     if (event.target.className != "hiddenInput") {
-        saveChange(event, event.target.value);
-        console.log(event.target.value);
+        saveChange(event);
+        renderAllTasks();
     };
 
 };
 
-function saveChange(event, value) {
+function saveChange(event) {
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
-    tasks[targetIndex].text = value; 
-    renderAllTasks();
+    if (event.target.value != "") {
+        tasks[targetIndex].text = event.target.value; 
+    };
 };
 
 
 
-
-
 button.addEventListener('click', createNewTask);
-input.addEventListener("keypress", keyPressed);
+input.addEventListener('keypress', keyPressed);
 container.addEventListener('click', changeTask);
 container.addEventListener('blur', handleInputBlur, true);
-container.addEventListener('keypress', handleInputKey)
+container.addEventListener('keyup', handleInputKey);
+
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
 
