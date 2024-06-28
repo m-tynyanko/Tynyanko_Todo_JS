@@ -1,9 +1,25 @@
+body {
+    background-color: #dfbceb;
+    /* display: flex; */
+    justify-content: center;
+}
+
+.main-block {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* border: 2px rgb(0, 0, 0); */
+    background-color: white;
+    /* border-radius: 5%; */
+}
+
 div{
+    
     .d-content{
         display: block
         }
         .d-content span{
         display: block;
-        width: fit-content
+        width: fit-content;
+        
         } 
 }

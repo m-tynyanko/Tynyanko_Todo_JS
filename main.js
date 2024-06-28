@@ -16,7 +16,7 @@ function createNewTask() {
         alert("Please, type something!");
     } else {
         let newTask = {
-            text:input.value,
+            text:input.value.trim(),
             check:false,
             id:Date.now()
         };
@@ -33,8 +33,9 @@ function createNewTask() {
 
 
 function renderAllTasks() {
-    const tasksPerPage = 5
     let listOfTasksHTML = '';
+    
+    const tasksPerPage = 5
     let pages = Math.ceil(tasks.length / tasksPerPage);
 
     let firstOnPage = currentPageNum*tasksPerPage-tasksPerPage;
@@ -200,9 +201,10 @@ function handleInputBlur(event) {
 function saveChange(event) {
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     if (event.target.value != "") {
-        tasks[targetIndex].text = event.target.value; 
+        tasks[targetIndex].text = event.target.value.trim(); 
     };
 };
+
 
 
 
