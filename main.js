@@ -3,6 +3,7 @@ const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
 const delButton = document.getElementById("delAll");
 const checkBox = document.getElementById("checkAll");
+//const hInput = document.getElementById("hiddenInput");
 
 let tasks=[];
 let filterMode = "noFilter";
@@ -39,7 +40,7 @@ function renderAllTasks() {
         listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
                                 <input class="task-checkbox" type="checkbox" ${check}/>\
                                 <span class="task-text">${task.text}</span> \
-                                <input hidden class="task-text" value=${task.text}> \
+                                <input hidden class="task-text" id="hiddenInput" value=${task.text}> \
                                 <button class="task-button-delete">X</button> \
                             </li>`;
         
@@ -86,7 +87,14 @@ function changeTask(event) {
         hiddenInput.required = "true";
         
         hiddenInput.focus();
-        tasks[targetIndex].text = hiddenInput.value;
+        
+        if (hiddenInput.value != "") {
+            tasks[targetIndex].text = hiddenInput.value;
+            
+        } else {
+            console.log("input was empty");
+            
+        }
         console.log(hiddenInput.value);
 
         // let newInput = document.createElement("input");
@@ -103,8 +111,8 @@ function changeTask(event) {
         //let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     };
     delCheck();
-    renderAllTasks();
-    console.log("rendered");
+    //renderAllTasks();
+    
     //console.log(event.target.type+":"+event.target.parentNode.id);
     //console.log(event.detail+" "+event.target.className);
     
@@ -112,9 +120,12 @@ function changeTask(event) {
 
 
 function keyPressed(event) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && input.value != "") {
         createNewTask();
-    };
+    } else {
+        renderAllTasks();
+        console.log("enter");
+    }
 }
 
 function clearAll() {
@@ -169,6 +180,8 @@ function filterTasks(id) {
 button.addEventListener('click', createNewTask);
 input.addEventListener("keypress", keyPressed);
 container.addEventListener('click', changeTask);
+hiddenInput.addEventListener('dblclick', renderAllTasks);
+hiddenInput.addEventListener('keypress', keyPressed);
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
 
