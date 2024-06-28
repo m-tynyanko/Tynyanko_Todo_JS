@@ -16,7 +16,7 @@ function createNewTask() {
         alert("Please, type something!");
     } else {
         let newTask = {
-            text:input.value.trim(),
+            text:input.value,
             check:false,
             id:Date.now()
         };

@@ -1,25 +1,29 @@
 body {
     background-color: #dfbceb;
-    /* display: flex; */
+    display: flex;
     justify-content: center;
+    
 }
 
+
+
 .main-block {
+    height: 30%;
+    width: 30%;
+    margin: 2%;
     /* display: flex; */
     /* justify-content: center; */
     /* border: 2px rgb(0, 0, 0); */
     background-color: white;
-    /* border-radius: 5%; */
+    border-radius: 5%;
+}
+h2 {
+    font: Impact;
 }
 
-div{
-    
-    .d-content{
-        display: block
-        }
-        .d-content span{
-        display: block;
-        width: fit-content;
-        
-        } 
+li {
+    margin-top: 4%;
+    background: #b3f3f8;
+    border-radius: 5%;
+    height: 35px;
 }
