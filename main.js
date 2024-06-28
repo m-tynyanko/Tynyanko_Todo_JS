@@ -8,6 +8,9 @@ const checkBox = document.getElementById("checkAll");
 let tasks=[];
 let filterMode = "noFilter";
 
+let currentPageNum = 1
+
+
 function createNewTask() {
     if (input.value == ""){
         alert("Please, type something!");
@@ -30,9 +33,23 @@ function createNewTask() {
 
 
 function renderAllTasks() {
+    const tasksPerPage = 5
     let listOfTasksHTML = '';
-    let pages = Math.ceil(tasks.length / 5);
-    tasks.filter(task => task.check !== filterMode).forEach((task) => {
+    let pages = Math.ceil(tasks.length / tasksPerPage);
+
+    let firstOnPage = currentPageNum*tasksPerPage-tasksPerPage;
+    if (firstOnPage < 0) {
+        firstOnPage = 0;
+    };
+
+    let lastOnPage = tasksPerPage + firstOnPage;
+    if (lastOnPage > tasks.length){
+        lastOnPage = tasks.length;
+    }
+
+    let filteredTasks =  tasks.filter(task => task.check !== filterMode);
+
+    filteredTasks.slice(firstOnPage, lastOnPage).forEach((task) => {
         let check = "";
         if (task.check){
             check = "checked";
@@ -45,14 +62,16 @@ function renderAllTasks() {
                             </li>`;
         
     });
-    if (tasks.length > 5) {
+    if (filteredTasks.length > tasksPerPage) {
         
         listOfTasksHTML += `<p>`
-        for (let i = 1; i < pages; i++){
+        for (let i = 1; i < pages+1; i++){
             listOfTasksHTML += `<button class="page-button">${i}</button>`
         };
         listOfTasksHTML += `</p>`
-    };
+    } else {
+        currentPageNum = 1;
+    }
 
 
     if (tasks.length > 0) {        
@@ -97,7 +116,13 @@ function changeTask(event) {
         
         hiddenInput.focus();
     };
-    console.log(event.target)
+
+    if (event.target.className == "page-button") {
+        console.log(event.target);
+        currentPageNum = event.target.textContent;
+        renderAllTasks();
+    }
+    console.log(event.target.textContent)
     delCheck();
 };
 
@@ -112,7 +137,7 @@ function clearAll() {
     delCheck();
     renderAllTasks();
     console.log("cleared");
-}
+};
 
 function checkAll(event) {
     if (tasks.every(task => task.check) && !event.target.checked){
