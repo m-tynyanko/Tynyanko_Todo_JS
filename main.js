@@ -68,13 +68,15 @@ function changeTask(event) {
         if (tasks.every(task => task.check)){
             checkBox.checked = true;
         };
-
+        renderAllTasks();
     };
     if (event.target.type == 'submit') {
         tasks = tasks.filter(task => task.id != event.target.parentNode.id);
+        renderAllTasks();
     };
     if (event.target.type == 'button') {
         filterTasks(event.target.id);
+        renderAllTasks();
     };
     
     if (event.target.className == 'task-text' && event.detail == 2) {
@@ -88,14 +90,14 @@ function changeTask(event) {
         
         hiddenInput.focus();
         
-        if (hiddenInput.value != "") {
-            tasks[targetIndex].text = hiddenInput.value;
+        // if (hiddenInput.value != "") {
+        //     tasks[targetIndex].text = hiddenInput.value;
             
-        } else {
-            console.log("input was empty");
+        // } else {
+        //     console.log("input was empty");
             
-        }
-        console.log(hiddenInput.value);
+        // }
+        // console.log(hiddenInput.value);
 
         // let newInput = document.createElement("input");
         // newInput.type = "text";
@@ -111,22 +113,12 @@ function changeTask(event) {
         //let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     };
     delCheck();
-    //renderAllTasks();
+    
     
     //console.log(event.target.type+":"+event.target.parentNode.id);
     //console.log(event.detail+" "+event.target.className);
     
 };
-
-
-function keyPressed(event) {
-    if (event.key === "Enter" && input.value != "") {
-        createNewTask();
-    } else {
-        renderAllTasks();
-        console.log("enter");
-    }
-}
 
 function clearAll() {
     let targetId = 0;
@@ -171,8 +163,38 @@ function filterTasks(id) {
         filterMode = "noFilter";
     } else if (id ===  "completedId") {
         filterMode = false;
+    };
+};
+
+function keyPressed(event) {
+    if (event.key === "Enter" && input.value != "") {
+        createNewTask();
+    };
+};
+
+function handleInputKey(event) {
+    //console.log(event.key+ " : " + event.target.className);
+    if (event.key === "Enter" && event.target.className == "task-text") {
+        saveChange(event, event.target.value);
+        console.log("enter");
     }
 };
+
+function handleInputBlur(event) {
+    //console.log(event.target.className);
+    if (event.target.className != "hiddenInput") {
+        saveChange(event, event.target.value);
+        console.log(event.target.value);
+    };
+
+};
+
+function saveChange(event, value) {
+    let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
+    tasks[targetIndex].text = value; 
+    renderAllTasks();
+};
+
 
 
 
@@ -180,8 +202,8 @@ function filterTasks(id) {
 button.addEventListener('click', createNewTask);
 input.addEventListener("keypress", keyPressed);
 container.addEventListener('click', changeTask);
-hiddenInput.addEventListener('dblclick', renderAllTasks);
-hiddenInput.addEventListener('keypress', keyPressed);
+container.addEventListener('blur', handleInputBlur, true);
+container.addEventListener('keypress', handleInputKey)
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
 
