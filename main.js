@@ -7,9 +7,11 @@ const checkBox = document.getElementById("checkAll");
 
 let tasks=[];
 let filterMode = "noFilter";
+let filteredTasks;
 
-let currentPageNum = 1
 
+let currentPageNum = 1;
+const tasksPerPage = 5;
 
 function createNewTask() {
     if (input.value == ""){
@@ -31,12 +33,8 @@ function createNewTask() {
     
 };
 
-
-function renderAllTasks() {
-    let listOfTasksHTML = '';
-    
-    const tasksPerPage = 5
-    let pages = Math.ceil(tasks.length / tasksPerPage);
+function pagination(tasks){
+    pages = Math.ceil(tasks.length / tasksPerPage);
 
     let firstOnPage = currentPageNum*tasksPerPage-tasksPerPage;
     if (firstOnPage < 0) {
@@ -47,10 +45,30 @@ function renderAllTasks() {
     if (lastOnPage > tasks.length){
         lastOnPage = tasks.length;
     }
+    return {
+        pages, 
+        firstOnPage, 
+        lastOnPage
+    };
+};
 
-    let filteredTasks =  tasks.filter(task => task.check !== filterMode);
+function checkCurrentPage() {
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0) {
+        currentPageNum -= 1;
+        renderAllTasks();
+    }
+};
 
-    filteredTasks.slice(firstOnPage, lastOnPage).forEach((task) => {
+
+
+function renderAllTasks() {
+    let listOfTasksHTML = '';
+
+    filteredTasks =  filterTasks();
+
+    checkCurrentPage();
+
+    filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {
         let check = "";
         if (task.check){
             check = "checked";
@@ -66,7 +84,7 @@ function renderAllTasks() {
     if (filteredTasks.length > tasksPerPage) {
         
         listOfTasksHTML += `<p>`
-        for (let i = 1; i < pages+1; i++){
+        for (let i = 1; i < pagination(filteredTasks).pages+1; i++){
             listOfTasksHTML += `<button class="page-button">${i}</button>`
         };
         listOfTasksHTML += `</p>`
@@ -171,6 +189,7 @@ function filterTasks(id) {
     } else if (id ===  "completedId") {
         filterMode = false;
     };
+    return tasks.filter(task => task.check !== filterMode);
 };
 
 function keyPressed(event) {
