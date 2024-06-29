@@ -9,7 +9,7 @@ body {
 
 .main-block {
     height: 30%;
-    width: 45%;
+    width: 375px;
     margin: 2%;
     /* display: flex; */
     /* justify-content: center; */
@@ -19,7 +19,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 h2 {
-    font-style: comic;
+    font-family: "Montserrat", sans-serif;
     text-align: center;
 }
 
@@ -62,5 +62,6 @@ li {
     box-shadow: 0 0 0 2px white, 0 0 0 4px #3C82F8;
 }
 p {
+    font-family: "Montserrat", sans-serif;
     text-align: center;
 }
