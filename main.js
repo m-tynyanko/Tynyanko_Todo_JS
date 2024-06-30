@@ -53,9 +53,11 @@ function pagination(tasks){
 };
 
 function checkCurrentPage() {
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0) {
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0 && pagination(filteredTasks).pages > 1) {
         currentPageNum -= 1;
-        renderAllTasks();
+    }
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0 && pagination(filteredTasks).pages == 1) {
+        currentPageNum = 1;
     }
 };
 
@@ -101,7 +103,7 @@ function renderAllTasks() {
         </p>`;
     };
     container.innerHTML = listOfTasksHTML;
-
+    console.log(currentPageNum);
 };
 
 
@@ -141,7 +143,7 @@ function changeTask(event) {
         currentPageNum = event.target.textContent;
         renderAllTasks();
     }
-    console.log(event.target.textContent)
+    
     delCheck();
 };
 
