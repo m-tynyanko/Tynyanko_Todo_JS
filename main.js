@@ -7,6 +7,7 @@ const checkBox = document.getElementById("checkAll");
 
 let tasks=[];
 let filterMode = "noFilter";
+let filterName = "all";
 let filteredTasks;
 
 
@@ -62,7 +63,7 @@ function checkCurrentPage() {
     if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages == 1) {
         currentPageNum = 1;
     }
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1) {
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && filteredTasks.length > 0) {
         checkCurrentPage();
     }
 };
@@ -93,7 +94,12 @@ function renderAllTasks() {
         
         listOfTasksHTML += `<p>`
         for (let i = 1; i < pagination(filteredTasks).pages+1; i++){
-            listOfTasksHTML += `<button class="page-button">${i}</button>`
+            if (currentPageNum == i){
+                listOfTasksHTML += `<button class="pressed-page-button">${i}</button>`;
+            } else {
+                listOfTasksHTML += `<button class="page-button">${i}</button>`;
+            }
+            
         };
         listOfTasksHTML += `</p>`
     } else {
@@ -101,12 +107,30 @@ function renderAllTasks() {
     }
 
 
-    if (tasks.length > 0) {        
-        listOfTasksHTML += `<p> \
-        <button id="allId" type="button">All(${tasks.length})</button> \
-        <button id="activeId" type="button">Active(${tasks.filter(task => task.check == false).length})</button> \
-        <button id="completedId" type="button">Completed(${tasks.filter(task => task.check == true).length})</button> \
-        </p>`;
+    if (tasks.length > 0) {    
+        listOfTasksHTML += `<p>`;
+        if (filterMode === "noFilter"){
+            listOfTasksHTML += `<button id="allId" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
+        } else {
+            listOfTasksHTML += `<button id="allId" type="button" class="filter-button">All(${tasks.length})</button>`;
+        };
+        if (filterMode === true) {
+            listOfTasksHTML += `<button id="activeId" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+        } else {
+            listOfTasksHTML += `<button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+        };
+        if (filterMode === false) {
+            listOfTasksHTML += `<button id="completedId" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+        } else {
+            listOfTasksHTML += `<button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+        };
+        listOfTasksHTML += `<p>`;
+
+
+        // <button id="allId" type="button" class="filter-button">All(${tasks.length})</button> \
+        // <button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button> \
+        // <button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button> \
+        // </p>`;
     };
     container.innerHTML = listOfTasksHTML;
     console.log(currentPageNum);
@@ -192,10 +216,13 @@ function delCheck() {
 function filterTasks(id) {
     if (id === "activeId") {
         filterMode = true;
+        
     } else if (id === "allId") {
         filterMode = "noFilter";
+        
     } else if (id ===  "completedId") {
         filterMode = false;
+        
     };
     filteredTasks =  tasks.filter(task => task.check !== filterMode);
 };

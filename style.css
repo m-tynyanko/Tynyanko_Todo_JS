@@ -11,11 +11,12 @@ body {
     height: 30%;
     width: 375px;
     margin: 2%;
+    
     /* display: flex; */
     /* justify-content: center; */
     /* border: 2px rgb(0, 0, 0); */
     background-color: white;
-    border-radius: 5%;
+    border-radius: 17px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
 }
@@ -24,31 +25,72 @@ h2 {
     text-align: center;
 }
 
+
+
 li {
-    
+    justify-content: space-between;
+    display: flex;
     text-align: left;
     overflow: hidden;
     margin-left: 4%;
     margin-right: 4%;
     margin-top: 4%;
     background: #b3f3f8;
-    border-radius: 2% / 20%;
+    border-radius: 25px / 35px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 90%;
     height: 35px;
+    Align-items: center;
     
     
 }
+
+.input-block {
+    display: flex;
+    text-align: left;
+    /* align-items: center;
+    text-align: center;
+    width: 70%;
+    height: 25px; */
+}
+
+
 .task-checkbox {
-    
+    margin-left: 4%;
     float: left;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #167bda;
+    transition: .2s linear;
 }
+
 .task-button-delete{
+    margin-right: 3%;
+    color: white;
     float: right;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #ff7c7c;
+    transition: .2s linear;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    
 }
+.task-button-delete:hover {
+    
+    box-shadow: 0 0 0 2px #b3f3f8, 0 0 0 4px #ff7c7c;
+}
+
+
+
 .task-text {
     font-family: "Montserrat", sans-serif;
+    
     margin: 5%;
+    /* margin-right: 70%; */
 }
 
 .input-field {
@@ -57,9 +99,9 @@ li {
     
     margin-top: 4%;
     border-top-left-radius: 4% 30%;
-    border-bottom-left-radius: 4% 30%;
+    border-bottom-left-radius: 4% 30%; 
     width: 70%;
-    height: 25px;
+    height: 24px;
 }
 
 .add-task-button {
@@ -68,11 +110,12 @@ li {
     color: white;
     transition: .2s linear;
     background: #0B63F6;
-
+    border: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     width: 17%;
-    height: 30px;
+    height: 29px;
+    margin-top: 15px;
 }
 
 .add-task-button:hover {
@@ -82,4 +125,51 @@ li {
 p {
     font-family: "Montserrat", sans-serif;
     text-align: center;
+}
+
+.page-button {
+    
+    background-color: white;
+    margin-left: 4px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.09);
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: none;
+    
+}
+
+.pressed-page-button {
+    /* margin-left: 1px; */
+    background-color: #b3f3f8;
+    margin-left: 4px;
+    
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: none;
+    
+}
+
+.filter-button {
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    margin-left: 5%;
+    border: none;
+    height: 30px;
+    width: 20%;
+    border-radius: 25px / 35px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.pressed-filter-button {
+    text-align: center;
+    background-color: #b3f3f8;
+    font-family: "Montserrat", sans-serif;
+    margin-left: 5%;
+    border: none;
+    height: 30px;
+    width: 20%;
+    border-radius: 25px / 35px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
