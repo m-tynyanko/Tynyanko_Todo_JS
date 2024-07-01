@@ -22,7 +22,7 @@ function createNewTask() {
         alert("Please, type something!");
     } else {
         let newTask = {
-            text:input.value,
+            text:escapeRegex(input.value.trim()),
             check:false,
             id:Date.now()
         };
@@ -36,6 +36,11 @@ function createNewTask() {
     };
     
 };
+// 
+function escapeRegex(input) {
+    return input.replace('<', '');
+}
+
 
 function pagination(tasks){
     pages = Math.ceil(tasks.length / tasksPerPage);
@@ -267,7 +272,7 @@ function handleInputBlur(event) {
 function saveChange(event) {
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     if (event.target.value != "") {
-        tasks[targetIndex].text = event.target.value.trim(); 
+        tasks[targetIndex].text = escapeRegex(event.target.value.trim()); 
     };
 };
 
