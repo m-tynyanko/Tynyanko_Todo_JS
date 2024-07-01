@@ -19,7 +19,13 @@ body {
     border-radius: 17px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
+    
 }
+
+.container {
+    white-space: normal;
+}
+
 h2 {
     font-family: "Montserrat", sans-serif;
     text-align: center;
@@ -38,16 +44,18 @@ li {
     background: #b3f3f8;
     border-radius: 25px / 35px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    height: 35px;
+    width: 345px;
+    /* height: 35px; */
     Align-items: center;
-    
+    word-wrap: break-all;
+    overflow-wrap: break-word;
     
 }
 
 .input-block {
-    display: flex;
-    text-align: left;
+    display: flex; 
+    /* text-align: left;
+    
     /* align-items: center;
     text-align: center;
     width: 70%;
@@ -66,12 +74,12 @@ li {
 }
 
 .task-button-delete{
-    margin-right: 3%;
+    margin-right: 10px;
     color: white;
     float: right;
     width: 25px;
     height: 25px;
-    border-radius: 50%;
+    border-radius: 50px;
     background-color: #ff7c7c;
     transition: .2s linear;
     text-align: center;
@@ -88,8 +96,10 @@ li {
 
 .task-text {
     font-family: "Montserrat", sans-serif;
-    
+    /* word-wrap: break-all;
+    overflow-wrap: break-word; */
     margin: 5%;
+    
     /* margin-right: 70%; */
 }
 
@@ -123,6 +133,7 @@ li {
     box-shadow: 0 0 0 2px white, 0 0 0 4px #3C82F8;
 }
 p {
+    
     font-family: "Montserrat", sans-serif;
     text-align: center;
 }
@@ -152,12 +163,13 @@ p {
 }
 
 .filter-button {
+    
     text-align: center;
     font-family: "Montserrat", sans-serif;
     margin-left: 5%;
     border: none;
     height: 30px;
-    width: 20%;
+    width: 27%;
     border-radius: 25px / 35px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
@@ -169,7 +181,29 @@ p {
     margin-left: 5%;
     border: none;
     height: 30px;
-    width: 20%;
+    width: 27%;
     border-radius: 25px / 35px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.clear-button {
+    font-family: "Montserrat", sans-serif;
+    margin-right: 29px;
+    color: white;
+    float: right;
+    width: 52px;
+    height: 27px;
+    border-radius: 10px;
+    background-color: #ff7c7c;
+    transition: .2s linear;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+}
+.clear-button:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #ff7c7c;
+}
+
+.all-checkbox {
+    margin-left: 60px;
 }

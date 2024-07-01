@@ -12,14 +12,14 @@
     <div class="main-block">
         <h2>ToDoJS App</h2>
         <div class="input-block">
-            <input id="inputId" class="input-field" size="10" />
+            <input id="inputId" class="input-field" maxlength="255" size="10" />
             <button id="buttonId" class="add-task-button" type="button">add</button>
         </div>
         <div class="container"></div>
         <p>
-            <input type="checkbox" id="checkAll" name="check"/>
+            <input type="checkbox" class="all-checkbox" id="checkAll" name="check"/>
             <label for="check">Check all todos</label>
-            <button id="delAll" type="button">Clear</button>
+            <button id="delAll" class="clear-button" type="button">Clear</button>
         </p>
     </div>
     <script src="./main.js"></script>

@@ -68,28 +68,8 @@ function checkCurrentPage() {
     }
 };
 
-
-
-function renderAllTasks() {
-    let listOfTasksHTML = '';
-
-    filterTasks();
-
-    checkCurrentPage();
-
-    filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {
-        let check = "";
-        if (task.check){
-            check = "checked";
-        };
-        listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
-                                <input class="task-checkbox" type="checkbox" ${check}/>\
-                                <span class="task-text">${task.text}</span> \
-                                <input hidden class="task-text" id="hiddenInput" value=${task.text}> \
-                                <button class="task-button-delete">X</button> \
-                            </li>`;
-        
-    });
+function renderPages(listOfTasksHTML) {
+    listOfTasksHTML = '';
     if (filteredTasks.length > tasksPerPage) {
         
         listOfTasksHTML += `<p>`
@@ -105,9 +85,12 @@ function renderAllTasks() {
     } else {
         currentPageNum = 1;
     }
+    return listOfTasksHTML;
+};
 
-
-    if (tasks.length > 0) {    
+function renderTabs(listOfTasksHTML){
+    listOfTasksHTML = ''; 
+    if (tasks.length > 0) {   
         listOfTasksHTML += `<p>`;
         if (filterMode === "noFilter"){
             listOfTasksHTML += `<button id="allId" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
@@ -125,13 +108,42 @@ function renderAllTasks() {
             listOfTasksHTML += `<button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
         };
         listOfTasksHTML += `<p>`;
-
-
         // <button id="allId" type="button" class="filter-button">All(${tasks.length})</button> \
         // <button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button> \
         // <button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button> \
         // </p>`;
     };
+    return listOfTasksHTML;
+};
+
+function renderAllTasks() {
+    let listOfTasksHTML = '';
+
+    filterTasks();
+
+    checkCurrentPage();
+
+    filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {
+        let check = "";
+        if (task.check){
+            check = "checked";
+        };
+        listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
+                                <input class="task-checkbox" type="checkbox" ${check}/>\
+                                <span class="task-text">${task.text}</span> \
+                                <input hidden class="task-text" id="hiddenInput" maxLength="256" value=${task.text}> \
+                                <button class="task-button-delete">X</button> \
+                            </li>`;
+        
+    });
+    let pageButtons = renderPages(listOfTasksHTML);
+    let tabs = renderTabs(listOfTasksHTML);
+
+    
+    listOfTasksHTML += pageButtons;
+    listOfTasksHTML += tabs;
+
+    
     container.innerHTML = listOfTasksHTML;
     console.log(currentPageNum);
 };
