@@ -13,6 +13,9 @@ let filteredTasks;
 let currentPageNum = 1;
 const tasksPerPage = 5;
 
+
+filterTasks();
+
 function createNewTask() {
     if (input.value == ""){
         alert("Please, type something!");
@@ -53,11 +56,14 @@ function pagination(tasks){
 };
 
 function checkCurrentPage() {
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0 && pagination(filteredTasks).pages > 1) {
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages > 1) {
         currentPageNum -= 1;
     }
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage == 0 && pagination(filteredTasks).pages == 1) {
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages == 1) {
         currentPageNum = 1;
+    }
+    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1) {
+        checkCurrentPage();
     }
 };
 
@@ -66,7 +72,7 @@ function checkCurrentPage() {
 function renderAllTasks() {
     let listOfTasksHTML = '';
 
-    filteredTasks =  filterTasks();
+    filterTasks();
 
     checkCurrentPage();
 
@@ -191,7 +197,7 @@ function filterTasks(id) {
     } else if (id ===  "completedId") {
         filterMode = false;
     };
-    return tasks.filter(task => task.check !== filterMode);
+    filteredTasks =  tasks.filter(task => task.check !== filterMode);
 };
 
 function keyPressed(event) {
