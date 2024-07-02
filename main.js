@@ -5,9 +5,10 @@ const button = document.querySelector(".add-task-button");
 const container = document.querySelector(".container");
 const delButton = document.querySelector(".clear-button");
 const checkBox = document.querySelector(".all-checkbox");
-const allButton = document.getElementById("all-id");
-const activeButton = document.getElementById("active-id");
-const completedButton = document.getElementById("completed-id");
+const allButton = document.querySelector("div.tabs > p #all-id");
+const activeButton = document.querySelector("div.tabs > p #active-id");
+const completedButton = document.querySelector("div.tabs > p #completed-id");
+const tabs = document.querySelector(".tabs");
 
 
 
@@ -72,16 +73,16 @@ const pagination = (tasks) => {
 
 const checkCurrentPage = () => {
     let filteredTasks = filterTasks();
-    let isPageEmpty = pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage;
+    let isPageEmpty = pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1;
     let pages = pagination(filteredTasks).pages;
 
-    if (isPageEmpty < 1 && pages > 1) {
+    if (isPageEmpty && pages > 1) {
         currentPageNum -= 1;
     }
-    if (isPageEmpty < 1 && pages == 1) {
+    if (isPageEmpty && pages == 1) {
         currentPageNum = 1;
     }
-    if (isPageEmpty < 1 && filteredTasks.length > 0) {
+    if (isPageEmpty && filteredTasks.length > 0) {
         checkCurrentPage();
     }
 };
@@ -108,48 +109,22 @@ const renderPages = (listOfTasksHTML) => {
 };
 
 const renderTabs = () => {
-    allButton.value = 'All(' + tasks.length + ')';
-    activeButton.value = 'Active(' + tasks.filter(task => task.check == false).length + ')';
-    completedButton.value = 'Completed(' + tasks.filter(task => task.check == true).length + ')';
+    allButton.innerText = 'All(' + tasks.length + ')';
+    activeButton.innerText = 'Active(' + tasks.filter(task => task.check == false).length + ')';
+    completedButton.innerText = 'Completed(' + tasks.filter(task => task.check == true).length + ')';
     if (filterMode === "noFilter") {
-        allButton.class = "pressed-filter-button";
-        activeButton.class = "filter-button";
-        completedButton.class = "filter-button";
+        allButton.className = "pressed-filter-button";
+        activeButton.className = "filter-button";
+        completedButton.className = "filter-button";
     } else if (filterMode === true) {
-        allButton.class = "filter-button";
-        activeButton.class = "pressed-filter-button";
-        completedButton.class = "filter-button";
+        allButton.className = "filter-button";
+        activeButton.className = "pressed-filter-button";
+        completedButton.className = "filter-button";
     } else {
-        allButton.class = "filter-button";
-        activeButton.class = "filter-button";
-        completedButton.class = "pressed-filter-button";
+        allButton.className = "filter-button";
+        activeButton.className = "filter-button";
+        completedButton.className = "pressed-filter-button";
     };
-    // listOfTasksHTML = ''; 
-    // if (tasks.length > 0) {   
-    //     listOfTasksHTML += `<p>`;
-    //     if (filterMode === "noFilter"){
-
-    //         listOfTasksHTML += `<button id="all-id" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
-    //     } else {
-    //         listOfTasksHTML += `<button id="all-id" type="button" class="filter-button">All(${tasks.length})</button>`;
-    //     };
-    //     if (filterMode === true) {
-    //         listOfTasksHTML += `<button id="active-id" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
-    //     } else {
-    //         listOfTasksHTML += `<button id="active-id" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
-    //     };
-    //     if (filterMode === false) {
-    //         listOfTasksHTML += `<button id="completed-id" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
-    //     } else {
-    //         listOfTasksHTML += `<button id="completed-id" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
-    //     };
-    //     listOfTasksHTML += `<p>`;
-        // <button id="allId" type="button" class="filter-button">All(${tasks.length})</button> \
-        // <button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button> \
-        // <button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button> \
-        // </p>`;
-    
-    
 };
 
 const renderAllTasks = () => {
@@ -172,13 +147,10 @@ const renderAllTasks = () => {
         
     });
     let pageButtons = renderPages(listOfTasksHTML);
-    // let tabs = renderTabs(listOfTasksHTML);
+
     renderTabs();
     
     listOfTasksHTML += pageButtons;
-    // listOfTasksHTML += tabs;
-
-    
     container.innerHTML = listOfTasksHTML;
 };
 
@@ -202,9 +174,12 @@ const createNewTask = () => {
 };
 
 const changeTask = (event) => {
+    let targetObject = event.target;
+    let doubleClick = event.detail == 2;
 
-    let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
-    if (event.target.type == 'checkbox') {
+    let targetIndex = tasks.findIndex(task => task.id == targetObject.parentNode.id);
+    
+    if (targetObject.type == 'checkbox') {
         
         tasks[targetIndex].check = !tasks[targetIndex].check;
         
@@ -214,19 +189,14 @@ const changeTask = (event) => {
         };
         renderAllTasks();
     };
-    if (event.target.type == 'submit') {
-        tasks = tasks.filter(task => task.id != event.target.parentNode.id);
-        renderAllTasks();
-    };
-    if (event.target.type == 'button') {
-        currentPageNum = 1;
-        filterTasks(event.target.id);
+    if (targetObject.type == 'submit') {
+        tasks = tasks.filter(task => task.id != targetObject.parentNode.id);
         renderAllTasks();
     };
     
-    if (event.target.className == 'task-text' && event.detail == 2) {
-        event.target.hidden = "true";
-        let hiddenInput = event.target.nextElementSibling;
+    if (targetObject.className == 'task-text' && doubleClick) {
+        targetObject.hidden = "true";
+        let hiddenInput = targetObject.nextElementSibling;
         hiddenInput.hidden = "";
         hiddenInput.required = "true";
         
@@ -311,6 +281,14 @@ const handleInputBlur = (event) => {
 
 };
 
+const changeFilterButton = (event) => {
+    if (event.target.type == "button") {
+        filterTasks(event.target.id);
+        currentPageNum = 1;
+        renderAllTasks();
+    }
+};
+
 
 button.addEventListener('click', createNewTask);
 input.addEventListener('keypress', keyPressed);
@@ -319,7 +297,7 @@ container.addEventListener('blur', handleInputBlur, true);
 container.addEventListener('keyup', handleInputKey);
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
-tabs
+tabs.addEventListener('click', changeFilterButton);
 
 
 })();
