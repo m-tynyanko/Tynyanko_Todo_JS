@@ -1,50 +1,24 @@
 (function() {
 
-
-const input = document.getElementById("inputId");
-const button = document.getElementById("buttonId");
+const input = document.querySelector(".input-field");
+const button = document.querySelector(".add-task-button");
 const container = document.querySelector(".container");
-const delButton = document.getElementById("delAll");
-const checkBox = document.getElementById("checkAll");
-
+const delButton = document.querySelector(".clear-button")
+const checkBox = document.querySelector(".all-checkbox")
 
 let tasks=[];
-let filterMode = "noFilter";
-let filterName = "all";
+let filterMode = "no_filter";
 let filteredTasks;
-
 
 let currentPageNum = 1;
 const tasksPerPage = 5;
 
 
-filterTasks();
 
-function createNewTask() {
-    if (input.value.trim() == ""  || input.value.trim() == " "){
-        input.value = "";
-        // alert("Please, type something!");
-    } else {
-        let newTask = {
-            text:escapeRegex(input.value.trim()),
-            check:false,
-            id:Date.now()
-        };
-        tasks.push(newTask);
-
-        console.log(tasks);
-        input.value = "";
-        input.focus();
-        delCheck();
-        renderAllTasks();
-    };
-    
-};
-
-function escapeRegex(input) {
+const escapeRegex = (input) => {
     // return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
-        switch (match) {
+        switch(match) {
             case '&': return '&amp;';
             case '<': return '&lt;';
             case '>': return '&gt;';
@@ -59,10 +33,27 @@ function escapeRegex(input) {
             case ")": return '&#x29;';
         }
     });
-}
+};
 
+const filterTasks = (id) => {
+    if (id === "active-id") {
+        filterMode = true;
+        
+    } else if (id === "all-id") {
+        filterMode = "no_filter";
+        
+    } else if (id ===  "completed-id") {
+        filterMode = false;
+        
+    };
+    
+    filteredTasks =  tasks.filter(task => task.check !== filterMode);
+    return filteredTasks;
+};
 
-function pagination(tasks){
+filterTasks();
+
+const pagination = (tasks) => {
     pages = Math.ceil(tasks.length / tasksPerPage);
 
     let firstOnPage = currentPageNum*tasksPerPage-tasksPerPage;
@@ -81,7 +72,7 @@ function pagination(tasks){
     };
 };
 
-function checkCurrentPage() {
+const checkCurrentPage = () => {
     if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages > 1) {
         currentPageNum -= 1;
     }
@@ -93,7 +84,7 @@ function checkCurrentPage() {
     }
 };
 
-function renderPages(listOfTasksHTML) {
+const renderPages = (listOfTasksHTML) => {
     listOfTasksHTML = '';
     if (filteredTasks.length > tasksPerPage) {
         
@@ -113,24 +104,24 @@ function renderPages(listOfTasksHTML) {
     return listOfTasksHTML;
 };
 
-function renderTabs(listOfTasksHTML){
+const renderTabs = (listOfTasksHTML) => {
     listOfTasksHTML = ''; 
     if (tasks.length > 0) {   
         listOfTasksHTML += `<p>`;
         if (filterMode === "noFilter"){
-            listOfTasksHTML += `<button id="allId" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
+            listOfTasksHTML += `<button id="all-id" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
         } else {
-            listOfTasksHTML += `<button id="allId" type="button" class="filter-button">All(${tasks.length})</button>`;
+            listOfTasksHTML += `<button id="all-id" type="button" class="filter-button">All(${tasks.length})</button>`;
         };
         if (filterMode === true) {
-            listOfTasksHTML += `<button id="activeId" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+            listOfTasksHTML += `<button id="active-id" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
         } else {
-            listOfTasksHTML += `<button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+            listOfTasksHTML += `<button id="active-id" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
         };
         if (filterMode === false) {
-            listOfTasksHTML += `<button id="completedId" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+            listOfTasksHTML += `<button id="completed-id" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
         } else {
-            listOfTasksHTML += `<button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+            listOfTasksHTML += `<button id="completed-id" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
         };
         listOfTasksHTML += `<p>`;
         // <button id="allId" type="button" class="filter-button">All(${tasks.length})</button> \
@@ -141,7 +132,7 @@ function renderTabs(listOfTasksHTML){
     return listOfTasksHTML;
 };
 
-function renderAllTasks() {
+const renderAllTasks = () => {
     let listOfTasksHTML = '';
 
     filterTasks();
@@ -156,7 +147,7 @@ function renderAllTasks() {
         listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
                                 <input class="task-checkbox" type="checkbox" ${check}/>\
                                 <span class="task-text">${task.text}</span> \
-                                <input hidden class="task-text" id="hiddenInput" maxLength="256" value=${task.text}> \
+                                <input hidden class="task-text" id="hidden-input" maxLength="256" value=${task.text}> \
                                 <button class="task-button-delete">X</button> \
                             </li>`;
         
@@ -173,8 +164,28 @@ function renderAllTasks() {
     console.log(currentPageNum);
 };
 
+const createNewTask = () => {
+    if (input.value.trim() === ""  || input.value.trim() === " "){
+        input.value = "";
+        // alert("Please, type something!");
+    } else {
+        let newTask = {
+            text:escapeRegex(input.value.trim()),
+            check:false,
+            id:Date.now()
+        };
+        tasks.push(newTask);
 
-function changeTask(event) {
+        console.log(tasks);
+        input.value = "";
+        input.focus();
+        delCheck();
+        renderAllTasks();
+    };
+    
+};
+
+const changeTask = (event) => {
 
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     if (event.target.type == 'checkbox') {
@@ -216,7 +227,13 @@ function changeTask(event) {
     delCheck();
 };
 
-function clearAll() {
+const delCheck = () => {
+    if (tasks.length == 0 || !tasks.every(task => task.check)) {
+        checkBox.checked = false;
+    };
+};
+
+const clearAll = () => {
     let targetId = 0;
     tasks.forEach((task) => {
         if (task.check){
@@ -226,10 +243,9 @@ function clearAll() {
     });
     delCheck();
     renderAllTasks();
-    console.log("cleared");
 };
 
-function checkAll(event) {
+const checkAll = (event) => {
     if (tasks.every(task => task.check) && !event.target.checked){
         tasks.forEach((task) => {
             task.check = !task.check;
@@ -246,60 +262,37 @@ function checkAll(event) {
     console.log("all check");
 };
 
-function delCheck() {
-    if (tasks.length == 0 || !tasks.every(task => task.check)) {
-        checkBox.checked = false;
-    };
-};
-
-function filterTasks(id) {
-    if (id === "activeId") {
-        filterMode = true;
-        
-    } else if (id === "allId") {
-        filterMode = "noFilter";
-        
-    } else if (id ===  "completedId") {
-        filterMode = false;
-        
-    };
-    
-    filteredTasks =  tasks.filter(task => task.check !== filterMode);
-    return filteredTasks;
-};
-
-function keyPressed(event) {
+const keyPressed = (event) => {
     if (event.key === "Enter" && input.value != "") {
         createNewTask();
     };
 };
 
-function handleInputKey(event) {
-    console.log(event);
-    if (event.key === "Enter" && event.target.className == "task-text") {
-        saveChange(event);
-        renderAllTasks();
-    };
-    if (event.key === "Escape" && event.target.className == "task-text") {
-        renderAllTasks();
-    };
-};
-
-function handleInputBlur(event) {
-    if (event.target.className != "hiddenInput") {
-        saveChange(event);
-        renderAllTasks();
-    };
-
-};
-
-function saveChange(event) {
-    let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
-    if (event.target.value.trim() != "" || event.input.value.trim() == " ") {
+const saveChange = (event) => {
+    let targetIndex = tasks.findIndex(task => task.id === event.target.parentNode.id);
+    if (event.target.value.trim() != "" && event.input.value.trim() != " ") {
         tasks[targetIndex].text = escapeRegex(event.target.value.trim()); 
     };
 };
 
+const handleInputKey = (event) => {
+    console.log(event);
+    if (event.key === "Enter" && event.target.className === "task-text") {
+        saveChange(event);
+        renderAllTasks();
+    };
+    if (event.key === "Escape" && event.target.className === "task-text") {
+        renderAllTasks();
+    };
+};
+
+const handleInputBlur = (event) => {
+    if (event.target.className !== "hidden-input") {
+        saveChange(event);
+        renderAllTasks();
+    };
+
+};
 
 
 
