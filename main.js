@@ -12,10 +12,7 @@ let filterMode = "noFilter";
 let currentPageNum = 1;
 const tasksPerPage = 5;
 
-
-
 const escapeRegex = (input) => {
-    // return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
         switch(match) {
             case '&': return '&amp;';
@@ -219,9 +216,11 @@ const changeTask = (event) => {
         console.log(event.target);
         currentPageNum = event.target.textContent;
         renderAllTasks();
+
     }
     
     delCheck();
+    console.log(event.target.className);
 };
 
 const delCheck = () => {
@@ -266,8 +265,8 @@ const keyPressed = (event) => {
 };
 
 const saveChange = (event) => {
-    let targetIndex = tasks.findIndex(task => task.id === event.target.parentNode.id);
-    if (event.target.value.trim() != "" && event.input.value.trim() != " ") {
+    let targetIndex = tasks.findIndex((task) => task.id == event.target.parentNode.id);
+    if (event.target.value.trim() != "" && event.target.value.trim() != " ") {
         tasks[targetIndex].text = escapeRegex(event.target.value.trim()); 
     };
 };
@@ -284,13 +283,13 @@ const handleInputKey = (event) => {
 };
 
 const handleInputBlur = (event) => {
+    console.log("blur target:"+event.target.value);
     if (event.target.className !== "hidden-input") {
         saveChange(event);
         renderAllTasks();
     };
 
 };
-
 
 
 button.addEventListener('click', createNewTask);
