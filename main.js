@@ -46,7 +46,7 @@ const filterTasks = (id) => {
 };
 
 const pagination = (tasks) => {
-    pages = Math.ceil(tasks.length / tasksPerPage);
+    let pages = Math.ceil(tasks.length / tasksPerPage);
 
     let firstOnPage = currentPageNum*tasksPerPage-tasksPerPage;
     if (firstOnPage < 0) {
