@@ -38,7 +38,16 @@ function createNewTask() {
 };
 // 
 function escapeRegex(input) {
-    return input.replace('<', '');
+    // return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return input.replace(/[&<>"']/g, function(match) {
+        switch (match) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#039;';
+        }
+    });
 }
 
 
@@ -172,6 +181,7 @@ function changeTask(event) {
         renderAllTasks();
     };
     if (event.target.type == 'button') {
+        currentPageNum = 1;
         filterTasks(event.target.id);
         renderAllTasks();
     };
@@ -241,6 +251,7 @@ function filterTasks(id) {
         filterMode = false;
         
     };
+    
     filteredTasks =  tasks.filter(task => task.check !== filterMode);
 };
 
