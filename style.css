@@ -144,6 +144,7 @@ p {
 
 .page-button {
     
+    Align-items: center;
     background-color: white;
     margin-left: 4px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.09);
