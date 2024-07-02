@@ -7,8 +7,7 @@ const delButton = document.querySelector(".clear-button")
 const checkBox = document.querySelector(".all-checkbox")
 
 let tasks=[];
-let filterMode = "no_filter";
-let filteredTasks;
+let filterMode = "noFilter";
 
 let currentPageNum = 1;
 const tasksPerPage = 5;
@@ -40,18 +39,14 @@ const filterTasks = (id) => {
         filterMode = true;
         
     } else if (id === "all-id") {
-        filterMode = "no_filter";
+        filterMode = "noFilter";
         
     } else if (id ===  "completed-id") {
         filterMode = false;
         
     };
-    
-    filteredTasks =  tasks.filter(task => task.check !== filterMode);
-    return filteredTasks;
+    return tasks.filter(task => task.check !== filterMode);
 };
-
-filterTasks();
 
 const pagination = (tasks) => {
     pages = Math.ceil(tasks.length / tasksPerPage);
@@ -73,6 +68,8 @@ const pagination = (tasks) => {
 };
 
 const checkCurrentPage = () => {
+    let filteredTasks = filterTasks();
+
     if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages > 1) {
         currentPageNum -= 1;
     }
@@ -85,6 +82,7 @@ const checkCurrentPage = () => {
 };
 
 const renderPages = (listOfTasksHTML) => {
+    let filteredTasks = filterTasks();
     listOfTasksHTML = '';
     if (filteredTasks.length > tasksPerPage) {
         
@@ -135,8 +133,7 @@ const renderTabs = (listOfTasksHTML) => {
 const renderAllTasks = () => {
     let listOfTasksHTML = '';
 
-    filterTasks();
-
+    let filteredTasks = filterTasks();
     checkCurrentPage();
 
     filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {

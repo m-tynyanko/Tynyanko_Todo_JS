@@ -34,6 +34,9 @@ h2 {
 
 
 li {
+    display: inline-block; 
+    word-break: break-all; 
+    overflow-wrap: break-word;
     justify-content: space-between;
     display: flex;
     text-align: left;
