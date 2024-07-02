@@ -3,8 +3,14 @@
 const input = document.querySelector(".input-field");
 const button = document.querySelector(".add-task-button");
 const container = document.querySelector(".container");
-const delButton = document.querySelector(".clear-button")
-const checkBox = document.querySelector(".all-checkbox")
+const delButton = document.querySelector(".clear-button");
+const checkBox = document.querySelector(".all-checkbox");
+const allButton = document.getElementById("all-id");
+const activeButton = document.getElementById("active-id");
+const completedButton = document.getElementById("completed-id");
+
+
+
 
 let tasks=[];
 let filterMode = "noFilter";
@@ -66,14 +72,16 @@ const pagination = (tasks) => {
 
 const checkCurrentPage = () => {
     let filteredTasks = filterTasks();
+    let isPageEmpty = pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage;
+    let pages = pagination(filteredTasks).pages;
 
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages > 1) {
+    if (isPageEmpty < 1 && pages > 1) {
         currentPageNum -= 1;
     }
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && pagination(filteredTasks).pages == 1) {
+    if (isPageEmpty < 1 && pages == 1) {
         currentPageNum = 1;
     }
-    if (pagination(filteredTasks).lastOnPage - pagination(filteredTasks).firstOnPage < 1 && filteredTasks.length > 0) {
+    if (isPageEmpty < 1 && filteredTasks.length > 0) {
         checkCurrentPage();
     }
 };
@@ -83,7 +91,7 @@ const renderPages = (listOfTasksHTML) => {
     listOfTasksHTML = '';
     if (filteredTasks.length > tasksPerPage) {
         
-        listOfTasksHTML += `<p>`
+        listOfTasksHTML += `<p>`;
         for (let i = 1; i < pagination(filteredTasks).pages+1; i++){
             if (currentPageNum == i){
                 listOfTasksHTML += `<button class="pressed-page-button">${i}</button>`;
@@ -92,39 +100,56 @@ const renderPages = (listOfTasksHTML) => {
             }
             
         };
-        listOfTasksHTML += `</p>`
+        listOfTasksHTML += `</p>`;
     } else {
         currentPageNum = 1;
     }
     return listOfTasksHTML;
 };
 
-const renderTabs = (listOfTasksHTML) => {
-    listOfTasksHTML = ''; 
-    if (tasks.length > 0) {   
-        listOfTasksHTML += `<p>`;
-        if (filterMode === "noFilter"){
-            listOfTasksHTML += `<button id="all-id" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
-        } else {
-            listOfTasksHTML += `<button id="all-id" type="button" class="filter-button">All(${tasks.length})</button>`;
-        };
-        if (filterMode === true) {
-            listOfTasksHTML += `<button id="active-id" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
-        } else {
-            listOfTasksHTML += `<button id="active-id" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
-        };
-        if (filterMode === false) {
-            listOfTasksHTML += `<button id="completed-id" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
-        } else {
-            listOfTasksHTML += `<button id="completed-id" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
-        };
-        listOfTasksHTML += `<p>`;
+const renderTabs = () => {
+    allButton.value = 'All(' + tasks.length + ')';
+    activeButton.value = 'Active(' + tasks.filter(task => task.check == false).length + ')';
+    completedButton.value = 'Completed(' + tasks.filter(task => task.check == true).length + ')';
+    if (filterMode === "noFilter") {
+        allButton.class = "pressed-filter-button";
+        activeButton.class = "filter-button";
+        completedButton.class = "filter-button";
+    } else if (filterMode === true) {
+        allButton.class = "filter-button";
+        activeButton.class = "pressed-filter-button";
+        completedButton.class = "filter-button";
+    } else {
+        allButton.class = "filter-button";
+        activeButton.class = "filter-button";
+        completedButton.class = "pressed-filter-button";
+    };
+    // listOfTasksHTML = ''; 
+    // if (tasks.length > 0) {   
+    //     listOfTasksHTML += `<p>`;
+    //     if (filterMode === "noFilter"){
+
+    //         listOfTasksHTML += `<button id="all-id" type="button" class="pressed-filter-button">All(${tasks.length})</button>`;
+    //     } else {
+    //         listOfTasksHTML += `<button id="all-id" type="button" class="filter-button">All(${tasks.length})</button>`;
+    //     };
+    //     if (filterMode === true) {
+    //         listOfTasksHTML += `<button id="active-id" type="button" class="pressed-filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+    //     } else {
+    //         listOfTasksHTML += `<button id="active-id" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button>`;
+    //     };
+    //     if (filterMode === false) {
+    //         listOfTasksHTML += `<button id="completed-id" type="button" class="pressed-filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+    //     } else {
+    //         listOfTasksHTML += `<button id="completed-id" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button>`;
+    //     };
+    //     listOfTasksHTML += `<p>`;
         // <button id="allId" type="button" class="filter-button">All(${tasks.length})</button> \
         // <button id="activeId" type="button" class="filter-button">Active(${tasks.filter(task => task.check == false).length})</button> \
         // <button id="completedId" type="button" class="filter-button">Completed(${tasks.filter(task => task.check == true).length})</button> \
         // </p>`;
-    };
-    return listOfTasksHTML;
+    
+    
 };
 
 const renderAllTasks = () => {
@@ -147,21 +172,19 @@ const renderAllTasks = () => {
         
     });
     let pageButtons = renderPages(listOfTasksHTML);
-    let tabs = renderTabs(listOfTasksHTML);
-
+    // let tabs = renderTabs(listOfTasksHTML);
+    renderTabs();
     
     listOfTasksHTML += pageButtons;
-    listOfTasksHTML += tabs;
+    // listOfTasksHTML += tabs;
 
     
     container.innerHTML = listOfTasksHTML;
-    console.log(currentPageNum);
 };
 
 const createNewTask = () => {
     if (input.value.trim() === ""  || input.value.trim() === " "){
         input.value = "";
-        // alert("Please, type something!");
     } else {
         let newTask = {
             text:escapeRegex(input.value.trim()),
@@ -170,7 +193,6 @@ const createNewTask = () => {
         };
         tasks.push(newTask);
 
-        console.log(tasks);
         input.value = "";
         input.focus();
         delCheck();
@@ -186,7 +208,6 @@ const changeTask = (event) => {
         
         tasks[targetIndex].check = !tasks[targetIndex].check;
         
-        console.log(tasks);
 
         if (tasks.every(task => task.check)){
             checkBox.checked = true;
@@ -213,14 +234,12 @@ const changeTask = (event) => {
     };
 
     if (event.target.className == "page-button") {
-        console.log(event.target);
         currentPageNum = event.target.textContent;
         renderAllTasks();
 
     }
     
     delCheck();
-    console.log(event.target.className);
 };
 
 const delCheck = () => {
@@ -255,11 +274,11 @@ const checkAll = (event) => {
         });
     };
     renderAllTasks();
-    console.log("all check");
 };
 
 const keyPressed = (event) => {
-    if (event.key === "Enter" && input.value != "") {
+    const enter = "Enter";
+    if (event.key === enter && input.value != "") {
         createNewTask();
     };
 };
@@ -272,18 +291,19 @@ const saveChange = (event) => {
 };
 
 const handleInputKey = (event) => {
-    console.log(event);
-    if (event.key === "Enter" && event.target.className === "task-text") {
+    const enter = "Enter";
+    const escape = "Escape";
+
+    if (event.key === enter && event.target.className === "task-text") {
         saveChange(event);
         renderAllTasks();
     };
-    if (event.key === "Escape" && event.target.className === "task-text") {
+    if (event.key === escape && event.target.className === "task-text") {
         renderAllTasks();
     };
 };
 
 const handleInputBlur = (event) => {
-    console.log("blur target:"+event.target.value);
     if (event.target.className !== "hidden-input") {
         saveChange(event);
         renderAllTasks();
@@ -299,5 +319,7 @@ container.addEventListener('blur', handleInputBlur, true);
 container.addEventListener('keyup', handleInputKey);
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
+tabs
+
 
 })();
