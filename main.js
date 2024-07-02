@@ -1,4 +1,7 @@
-let input = document.getElementById("inputId");
+(function() {
+
+
+const input = document.getElementById("inputId");
 const button = document.getElementById("buttonId");
 const container = document.querySelector(".container");
 const delButton = document.getElementById("delAll");
@@ -18,8 +21,9 @@ const tasksPerPage = 5;
 filterTasks();
 
 function createNewTask() {
-    if (input.value == ""){
-        alert("Please, type something!");
+    if (input.value.trim() == ""  || input.value.trim() == " "){
+        input.value = "";
+        // alert("Please, type something!");
     } else {
         let newTask = {
             text:escapeRegex(input.value.trim()),
@@ -36,16 +40,23 @@ function createNewTask() {
     };
     
 };
-// 
+
 function escapeRegex(input) {
     // return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return input.replace(/[&<>"']/g, function(match) {
+    return input.replace(/[&<>"'№%:?*()]/g, function(match) {
         switch (match) {
             case '&': return '&amp;';
             case '<': return '&lt;';
             case '>': return '&gt;';
             case '"': return '&quot;';
             case "'": return '&#039;';
+            case "№": return '&#x2116;';
+            case "%": return '&#x25;';
+            case ":": return '&#x3a;';
+            case "?": return '&#x3f';
+            case "*": return '&#x2a;';
+            case "(": return '&#x28;';
+            case ")": return '&#x29;';
         }
     });
 }
@@ -164,6 +175,7 @@ function renderAllTasks() {
 
 
 function changeTask(event) {
+
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
     if (event.target.type == 'checkbox') {
         
@@ -253,6 +265,7 @@ function filterTasks(id) {
     };
     
     filteredTasks =  tasks.filter(task => task.check !== filterMode);
+    return filteredTasks;
 };
 
 function keyPressed(event) {
@@ -282,7 +295,7 @@ function handleInputBlur(event) {
 
 function saveChange(event) {
     let targetIndex = tasks.findIndex(task => task.id == event.target.parentNode.id);
-    if (event.target.value != "") {
+    if (event.target.value.trim() != "" || event.input.value.trim() == " ") {
         tasks[targetIndex].text = escapeRegex(event.target.value.trim()); 
     };
 };
@@ -295,7 +308,7 @@ input.addEventListener('keypress', keyPressed);
 container.addEventListener('click', changeTask);
 container.addEventListener('blur', handleInputBlur, true);
 container.addEventListener('keyup', handleInputKey);
-
 delButton.addEventListener('click', clearAll);
 checkBox.addEventListener('click', checkAll);
 
+})();
