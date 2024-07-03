@@ -1,4 +1,4 @@
-(function() {
+(() => {
 
 const input = document.querySelector(".input-field");
 const button = document.querySelector(".add-task-button");
@@ -18,6 +18,10 @@ let filterMode = "noFilter";
 
 let currentPageNum = 1;
 const tasksPerPage = 5;
+
+const ENTER = "Enter";
+const ESCAPE = "Escape";
+const DOUBLE_CLICK = 2;
 
 const escapeRegex = (input) => {
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
@@ -191,7 +195,6 @@ const createNewTask = () => {
 
 const changeTask = (event) => {
     let targetObject = event.target;
-    let doubleClick = event.detail == 2;
 
     let targetIndex = tasks.findIndex(task => task.id == targetObject.parentNode.id);
     
@@ -209,7 +212,7 @@ const changeTask = (event) => {
         renderAllTasks();
     };
     
-    if (targetObject.className === "task-text" && doubleClick) {
+    if (targetObject.className === "task-text" && event.detail == DOUBLE_CLICK) {
         
         targetObject.hidden = "true";
         let hiddenInput = targetObject.nextElementSibling;
@@ -264,8 +267,7 @@ const checkAll = (event) => {
 };
 
 const keyPressed = (event) => {
-    const enter = "Enter";
-    if (event.key === enter && input.value != "") {
+    if (event.key === ENTER && input.value != "") {
         createNewTask();
     };
 };
@@ -283,15 +285,14 @@ const saveChange = (event) => {
 const handleInputKey = (event) => {
     
 
-    const enter = "Enter";
-    const escape = "Escape";
+    
     let targetClass = event.target.className == "task-text";
 
-    if (event.key === enter && targetClass) {
+    if (event.key === ENTER && targetClass) {
         saveChange(event);
         renderAllTasks();
     };
-    if (event.key === escape && targetClass) {
+    if (event.key === ESCAPE && targetClass) {
         renderAllTasks();
     };
 };
