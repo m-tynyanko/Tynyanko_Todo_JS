@@ -1,4 +1,4 @@
-(function() {
+// (function() {
 
 const input = document.querySelector(".input-field");
 const button = document.querySelector(".add-task-button");
@@ -9,7 +9,7 @@ const allButton = document.querySelector("div.tabs > p #all-id");
 const activeButton = document.querySelector("div.tabs > p #active-id");
 const completedButton = document.querySelector("div.tabs > p #completed-id");
 const tabs = document.querySelector(".tabs");
-
+const mainBlock = document.querySelector(".main-block")
 
 
 
@@ -135,6 +135,8 @@ const renderAllTasks = () => {
     let listOfTasksHTML = '';
 
     let filteredTasks = filterTasks();
+
+    //????????????????????????
     checkCurrentPage();
 
     filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {
@@ -171,6 +173,12 @@ const createNewTask = () => {
 
         input.value = "";
         input.focus();
+        ////////////////
+        if (tasks.length > pagination(tasks).lastOnPage) {
+            currentPageNum += pagination(tasks).pages;
+            filterMode = "noFilter";
+        }
+        ////////////////
         delCheck();
         renderAllTasks();
     };
@@ -193,12 +201,12 @@ const changeTask = (event) => {
         };
         renderAllTasks();
     };
-    if (targetObject.type == 'submit') {
+    if (targetObject.type === "submit") {
         tasks = tasks.filter(task => task.id != targetObject.parentNode.id);
         renderAllTasks();
     };
     
-    if (targetObject.className == 'task-text' && doubleClick) {
+    if (targetObject.className === "task-text" && doubleClick) {
         targetObject.hidden = "true";
         let hiddenInput = targetObject.nextElementSibling;
         hiddenInput.hidden = "";
@@ -287,7 +295,7 @@ const handleInputBlur = (event) => {
 };
 
 const changeFilterButton = (event) => {
-    if (event.target.type == "button") {
+    if (event.target.type === "button") {
         filterTasks(event.target.id);
         currentPageNum = 1;
         renderAllTasks();
@@ -305,4 +313,4 @@ checkBox.addEventListener('click', checkAll);
 tabs.addEventListener('click', changeFilterButton);
 
 
-})();
+// })();

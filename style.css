@@ -37,6 +37,7 @@ li {
     display: inline-block; 
     word-break: break-all; 
     overflow-wrap: break-word;
+    white-space: pre-warp;
     justify-content: space-between;
     display: flex;
     text-align: left;
