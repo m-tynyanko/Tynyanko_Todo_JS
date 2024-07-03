@@ -17,10 +17,11 @@ body {
     /* border: 2px rgb(0, 0, 0); */
     background-color: white;
     border-radius: 17px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    
-    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
 }
+
+
+
 
 .container {
     white-space: normal;
@@ -214,5 +215,6 @@ p {
     margin-left: 60px;
 }
 .tabs {
+
     margin-right: 10px;
 }

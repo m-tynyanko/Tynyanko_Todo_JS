@@ -9,7 +9,7 @@ const allButton = document.querySelector("div.tabs > p #all-id");
 const activeButton = document.querySelector("div.tabs > p #active-id");
 const completedButton = document.querySelector("div.tabs > p #completed-id");
 const tabs = document.querySelector(".tabs");
-const mainBlock = document.querySelector(".main-block")
+const mainBlock = document.querySelector(".main-block");
 
 
 
@@ -136,6 +136,12 @@ const renderAllTasks = () => {
 
     let filteredTasks = filterTasks();
 
+
+    // if (tasks.length > 4){
+    //     tabs[0].style = "margin-top: 60%";
+    // } else {
+    //     tabs[0].style = "margin-top: 0%";
+    // }
     //????????????????????????
     checkCurrentPage();
 
@@ -147,17 +153,23 @@ const renderAllTasks = () => {
         listOfTasksHTML +=  `<li class="task" id="${task.id}"> \
                                 <input class="task-checkbox" type="checkbox" ${check}/>\
                                 <span class="task-text">${task.text}</span> \
-                                <input hidden class="task-text" id="hidden-input" maxLength="256" value=${task.text}> \
+                                <input hidden class="task-text" id="hidden-input" maxLength="256"> \
                                 <button class="task-button-delete">X</button> \
                             </li>`;
         
     });
     let pageButtons = renderPages(listOfTasksHTML);
 
-    renderTabs();
+    
     
     listOfTasksHTML += pageButtons;
     container.innerHTML = listOfTasksHTML;
+
+    renderTabs();
+};
+
+const inputFormatting = (input) => {
+    return escapeRegex(input.trim()).replace(/\s+/g, ' ');
 };
 
 const createNewTask = () => {
@@ -165,22 +177,24 @@ const createNewTask = () => {
         input.value = "";
     } else {
         let newTask = {
-            text:escapeRegex(input.value.trim()),
+            text:inputFormatting(input.value),
             check:false,
-            id:Date.now()
+            id: Date.now(),
         };
         tasks.push(newTask);
 
         input.value = "";
         input.focus();
-        ////////////////
+    
         if (tasks.length > pagination(tasks).lastOnPage) {
             currentPageNum += pagination(tasks).pages;
-            filterMode = "noFilter";
-        }
-        ////////////////
+            
+        };
+        filterMode = "noFilter";
+        
         delCheck();
         renderAllTasks();
+        console.log(tasks);
     };
     
 };
@@ -191,10 +205,9 @@ const changeTask = (event) => {
 
     let targetIndex = tasks.findIndex(task => task.id == targetObject.parentNode.id);
     
-    if (targetObject.type == 'checkbox') {
+    if (targetObject.className == 'task-checkbox') {
         
         tasks[targetIndex].check = !tasks[targetIndex].check;
-        
 
         if (tasks.every(task => task.check)){
             checkBox.checked = true;
@@ -207,8 +220,11 @@ const changeTask = (event) => {
     };
     
     if (targetObject.className === "task-text" && doubleClick) {
+        console.log("change task : " + targetObject.innerText);
+        
         targetObject.hidden = "true";
         let hiddenInput = targetObject.nextElementSibling;
+        hiddenInput.value = targetObject.innerText;
         hiddenInput.hidden = "";
         hiddenInput.required = "true";
         
@@ -266,16 +282,21 @@ const keyPressed = (event) => {
 };
 
 const saveChange = (event) => {
-    let targetIndex = tasks.findIndex((task) => task.id == event.target.parentNode.id);
+    let changedIndex = event.target.parentNode.id;
+    let targetIndex = tasks.findIndex((task) => {
+        return task.id == changedIndex;
+    });
     if (event.target.value.trim() != "" && event.target.value.trim() != " ") {
-        tasks[targetIndex].text = escapeRegex(event.target.value.trim()); 
+        tasks[targetIndex].text = inputFormatting(event.target.value);
     };
 };
 
 const handleInputKey = (event) => {
+    
+
     const enter = "Enter";
     const escape = "Escape";
-    let targetClass = event.target.className === "task-text";
+    let targetClass = event.target.className == "task-text";
 
     if (event.key === enter && targetClass) {
         saveChange(event);
@@ -287,7 +308,7 @@ const handleInputKey = (event) => {
 };
 
 const handleInputBlur = (event) => {
-    if (event.target.className !== "hidden-input") {
+    if (event.target.className !== "hidden-input" && event.target.className !== "task-checkbox") {
         saveChange(event);
         renderAllTasks();
     };
