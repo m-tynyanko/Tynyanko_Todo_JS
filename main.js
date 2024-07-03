@@ -109,21 +109,25 @@ const renderPages = (listOfTasksHTML) => {
 };
 
 const renderTabs = () => {
+    let normalButton = "filter-button";
+    let pressedButton = "pressed-filter-button";
+
     allButton.innerText = 'All(' + tasks.length + ')';
     activeButton.innerText = 'Active(' + tasks.filter(task => task.check == false).length + ')';
     completedButton.innerText = 'Completed(' + tasks.filter(task => task.check == true).length + ')';
+    
     if (filterMode === "noFilter") {
-        allButton.className = "pressed-filter-button";
-        activeButton.className = "filter-button";
-        completedButton.className = "filter-button";
+        allButton.className = pressedButton;
+        activeButton.className = normalButton;
+        completedButton.className = normalButton;
     } else if (filterMode === true) {
-        allButton.className = "filter-button";
-        activeButton.className = "pressed-filter-button";
-        completedButton.className = "filter-button";
+        allButton.className = normalButton;
+        activeButton.className = pressedButton;
+        completedButton.className = normalButton;
     } else {
-        allButton.className = "filter-button";
-        activeButton.className = "filter-button";
-        completedButton.className = "pressed-filter-button";
+        allButton.className = normalButton;
+        activeButton.className = normalButton;
+        completedButton.className = pressedButton;
     };
 };
 
@@ -203,8 +207,8 @@ const changeTask = (event) => {
         hiddenInput.focus();
     };
 
-    if (event.target.className == "page-button") {
-        currentPageNum = event.target.textContent;
+    if (targetObject.className == "page-button") {
+        currentPageNum = targetObject.textContent;
         renderAllTasks();
 
     }
@@ -263,12 +267,13 @@ const saveChange = (event) => {
 const handleInputKey = (event) => {
     const enter = "Enter";
     const escape = "Escape";
+    let targetClass = event.target.className === "task-text";
 
-    if (event.key === enter && event.target.className === "task-text") {
+    if (event.key === enter && targetClass) {
         saveChange(event);
         renderAllTasks();
     };
-    if (event.key === escape && event.target.className === "task-text") {
+    if (event.key === escape && targetClass) {
         renderAllTasks();
     };
 };
