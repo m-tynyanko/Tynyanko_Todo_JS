@@ -35,9 +35,9 @@ h2 {
 
 
 li {
-    display: inline-block; 
+    display: block; 
     word-break: break-all; 
-    overflow-wrap: break-word;
+    /* overflow-wrap: break-word; */
     white-space: pre-warp;
     justify-content: space-between;
     display: flex;
@@ -56,6 +56,8 @@ li {
     overflow-wrap: break-word;
     
 }
+
+
 
 .input-block {
     margin-left: 15px;
@@ -102,6 +104,12 @@ li {
 
 .task-text {
     font-family: "Montserrat", sans-serif;
+    flex: 1; /* Это позволит текстовому элементу занимать все доступное пространство */
+    word-break: break-all; /* Разрывает слова в любой точке */
+    overflow-wrap: break-word; /* Перенос длинных слов */
+    white-space: pre-wrap; /* Сохраняет пробелы и переносы строк */
+    text-align: left;
+    overflow: hidden;
     /* word-wrap: break-all;
     overflow-wrap: break-word; */
     margin: 5%;
@@ -146,6 +154,7 @@ p {
 
 .page-button {
     
+    top: calc(70% 10px);
     Align-items: center;
     background-color: white;
     margin-left: 4px;
@@ -158,6 +167,8 @@ p {
 }
 
 .pressed-page-button {
+    
+    top: calc(70% 10px);
     /* margin-left: 1px; */
     background-color: #b3f3f8;
     margin-left: 4px;
@@ -215,6 +226,11 @@ p {
     margin-left: 60px;
 }
 .tabs {
+    margin-top: 0%;
+    margin-right: 10px;
+}
 
+.tabs-full {
+    margin-top: 80%;
     margin-right: 10px;
 }

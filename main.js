@@ -1,4 +1,4 @@
-// (function() {
+(function() {
 
 const input = document.querySelector(".input-field");
 const button = document.querySelector(".add-task-button");
@@ -8,8 +8,8 @@ const checkBox = document.querySelector(".all-checkbox");
 const allButton = document.querySelector("div.tabs > p #all-id");
 const activeButton = document.querySelector("div.tabs > p #active-id");
 const completedButton = document.querySelector("div.tabs > p #completed-id");
-const tabs = document.querySelector(".tabs");
-const mainBlock = document.querySelector(".main-block");
+const tabs = document.querySelector("#tabs-id");
+
 
 
 
@@ -136,13 +136,6 @@ const renderAllTasks = () => {
 
     let filteredTasks = filterTasks();
 
-
-    // if (tasks.length > 4){
-    //     tabs[0].style = "margin-top: 60%";
-    // } else {
-    //     tabs[0].style = "margin-top: 0%";
-    // }
-    //????????????????????????
     checkCurrentPage();
 
     filteredTasks.slice(pagination(filteredTasks).firstOnPage, pagination(filteredTasks).lastOnPage).forEach((task) => {
@@ -160,8 +153,6 @@ const renderAllTasks = () => {
     });
     let pageButtons = renderPages(listOfTasksHTML);
 
-    
-    
     listOfTasksHTML += pageButtons;
     container.innerHTML = listOfTasksHTML;
 
@@ -194,7 +185,6 @@ const createNewTask = () => {
         
         delCheck();
         renderAllTasks();
-        console.log(tasks);
     };
     
 };
@@ -220,7 +210,6 @@ const changeTask = (event) => {
     };
     
     if (targetObject.className === "task-text" && doubleClick) {
-        console.log("change task : " + targetObject.innerText);
         
         targetObject.hidden = "true";
         let hiddenInput = targetObject.nextElementSibling;
@@ -334,4 +323,4 @@ checkBox.addEventListener('click', checkAll);
 tabs.addEventListener('click', changeFilterButton);
 
 
-// })();
+})();
