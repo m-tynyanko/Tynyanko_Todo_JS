@@ -280,6 +280,7 @@ const saveChange = (event) => {
     if (event.target.value.trim() != "" && event.target.value.trim() != " ") {
         tasks[targetIndex].text = inputFormatting(event.target.value);
     };
+    console.log("saved");
 };
 
 const handleInputKey = (event) => {
@@ -298,9 +299,10 @@ const handleInputKey = (event) => {
 };
 
 const handleInputBlur = (event) => {
-    if (event.target.className !== "hidden-input" && event.target.className !== "task-checkbox") {
+    if (event.target.className !== "hidden-input" && event.target.className !== "task-checkbox" && event.target.blur()) {
         saveChange(event);
         renderAllTasks();
+        console.log("blur");
     };
 
 };
