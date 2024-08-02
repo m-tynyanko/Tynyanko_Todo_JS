@@ -22,6 +22,9 @@ const tasksPerPage = 5;
 const ENTER = "Enter";
 const ESCAPE = "Escape";
 const DOUBLE_CLICK = 2;
+const URL = "http://localhost:3008/tasks/";
+const CONTENT_TYPE_JSON = 'application/json;charset=utf-8';
+
 
 const escapeRegex = (input) => {
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
@@ -167,10 +170,21 @@ const inputFormatting = (input) => {
     return escapeRegex(input.trim()).replace(/\s+/g, ' ');
 };
 
-const createNewTask = () => {
+const createNewTask = async () => {
     if (input.value.trim() === ""  || input.value.trim() === " "){
         input.value = "";
     } else {
+        let response = await fetch(URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': CONTENT_TYPE_JSON
+            },
+            body: JSON.stringify({
+                text: input.value
+            })
+        });
+        let result = await response.json();
+        console.log(result.message);
         let newTask = {
             text:inputFormatting(input.value),
             check:false,
