@@ -56,6 +56,45 @@ const destroyTask = (byId) => {
     });  
 };
 
+const destroyAllTask = () => {
+    fetch(URL+'all', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': CONTENT_TYPE_JSON,
+        },
+    })
+    .then(response => {
+        console.log(response.json());
+        getTasks();
+    });
+};
+
+const patchTask = (byId, target, newElem) => {
+    let forBody;
+    if (target === 'text') {
+        forBody = {
+            id: byId,
+            text: newElem,
+        };
+    } else if (target === 'check') {
+        forBody = {
+            id: byId,
+            isCheck: newElem,
+        };
+    }
+    fetch(URL+'byId', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': CONTENT_TYPE_JSON,
+        },
+        body: JSON.stringify(forBody),
+    })
+    .then(response => {
+        console.log(response.json());
+        getTasks();
+    });
+};
+
 const escapeRegex = (input) => {
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
         switch(match) {
@@ -246,8 +285,9 @@ const changeTask = (event) => {
     let targetIndex = tasks.findIndex(task => task.id == targetObject.parentNode.id);
     
     if (targetObject.className == 'task-checkbox') {
-        
-        tasks[targetIndex].check = !tasks[targetIndex].check;
+        console.log(!tasks[targetIndex].check);
+        patchTask(targetObject.parentNode.id, 'check', !tasks[targetIndex].check);
+        // tasks[targetIndex].check = !tasks[targetIndex].check;
 
         if (tasks.every(task => task.check)){
             checkBox.checked = true;
@@ -364,7 +404,7 @@ const changeFilterButton = (event) => {
 
 getTasks();
 
-// window.addEventListener('load', resetPage);
+
 button.addEventListener('click', createNewTask);
 input.addEventListener('keypress', keyPressed);
 container.addEventListener('click', changeTask);
