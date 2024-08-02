@@ -10,9 +10,6 @@ const activeButton = document.querySelector("div.tabs > p #active-id");
 const completedButton = document.querySelector("div.tabs > p #completed-id");
 const tabs = document.querySelector("#tabs-id");
 
-
-
-
 let tasks=[];
 let filterMode = "noFilter";
 
@@ -23,8 +20,41 @@ const ENTER = "Enter";
 const ESCAPE = "Escape";
 const DOUBLE_CLICK = 2;
 const URL = "http://localhost:3008/tasks/";
-const CONTENT_TYPE_JSON = 'application/json;charset=utf-8';
+const CONTENT_TYPE_JSON = 'application/json';
 
+const getTasks = () => {
+    tasks.length = 0;
+    fetch(URL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': CONTENT_TYPE_JSON,
+        },
+    })
+    .then(response => (response.json()))
+    .then(result => {
+        result.forEach((task) => {
+            tasks.push({ id: task.id, text: task.text, check: task.isCheck });
+        });
+        console.log(tasks);
+        renderAllTasks();
+    });
+};
+
+const destroyTask = (byId) => {
+    fetch(URL+'byId', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': CONTENT_TYPE_JSON,
+        },
+        body: JSON.stringify({
+            id: byId
+        })  
+    })
+    .then(response => {
+        console.log(response.json());
+        getTasks();
+    });  
+};
 
 const escapeRegex = (input) => {
     return input.replace(/[&<>"'№%:?*()]/g, function(match) {
@@ -141,6 +171,8 @@ const renderTabs = () => {
 const renderAllTasks = () => {
     let listOfTasksHTML = '';
 
+    // getTasks();
+
     let filteredTasks = filterTasks();
 
     checkCurrentPage();
@@ -174,35 +206,36 @@ const createNewTask = async () => {
     if (input.value.trim() === ""  || input.value.trim() === " "){
         input.value = "";
     } else {
-        let response = await fetch(URL, {
+        fetch(URL, {
             method: 'POST',
             headers: {
-                'Content-Type': CONTENT_TYPE_JSON
+                'Content-Type': CONTENT_TYPE_JSON,
             },
             body: JSON.stringify({
                 text: input.value
             })
-        });
-        let result = await response.json();
-        console.log(result.message);
-        let newTask = {
-            text:inputFormatting(input.value),
-            check:false,
-            id: Date.now(),
-        };
-        tasks.push(newTask);
-
-        input.value = "";
-        input.focus();
+        })
+        .then(response => (response.json()))
+        .then(result => {
+            let newTask = {
+                text:inputFormatting(result.text),
+                check:result.isCheck,
+                id: result.id,
+            };
+            tasks.push(newTask);
     
-        if (tasks.length > pagination(tasks).lastOnPage) {
-            currentPageNum += pagination(tasks).pages;
-            
-        };
-        filterMode = "noFilter";
+            input.value = "";
+            input.focus();
         
-        delCheck();
-        renderAllTasks();
+            if (tasks.length > pagination(tasks).lastOnPage) {
+                currentPageNum += pagination(tasks).pages;
+                
+            };
+            filterMode = "noFilter";
+            
+            delCheck();
+            renderAllTasks();
+        });
     };
     
 };
@@ -222,8 +255,8 @@ const changeTask = (event) => {
         renderAllTasks();
     };
     if (targetObject.type === "submit") {
-        tasks = tasks.filter(task => task.id != targetObject.parentNode.id);
-        renderAllTasks();
+        // tasks = tasks.filter(task => task.id != targetObject.parentNode.id);
+        destroyTask(targetObject.parentNode.id);
     };
     
     if (targetObject.className === "task-text" && event.detail == DOUBLE_CLICK) {
@@ -329,7 +362,9 @@ const changeFilterButton = (event) => {
     }
 };
 
+getTasks();
 
+// window.addEventListener('load', resetPage);
 button.addEventListener('click', createNewTask);
 input.addEventListener('keypress', keyPressed);
 container.addEventListener('click', changeTask);
